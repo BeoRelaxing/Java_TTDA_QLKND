@@ -1,0 +1,331 @@
+@startuml
+
+package "Models" {
+  class NguoiDung {
+    -id: int
+    -username: String
+    -email: String
+    -password: String
+    -phone: String
+    -role: String
+    -createdAt: Date
+    +getId(): int
+    +setId(id: int)
+    +getUsername(): String
+    +setUsername(username: String)
+    +getEmail(): String
+    +setEmail(email: String)
+    +getPassword(): String
+    +setPassword(password: String)
+    +getPhone(): String
+    +setPhone(phone: String)
+    +getRole(): String
+    +setRole(role: String)
+    +getCreatedAt(): Date
+    +setCreatedAt(createdAt: Date)
+  }
+
+  class Booking {
+    -bookingId: int
+    -userId: int
+    -roomId: int
+    -checkInDate: Date
+    -checkOutDate: Date
+    -totalPrice: double
+    -status: String
+    -createdAt: Date
+    +getBookingId(): int
+    +setBookingId(bookingId: int)
+    +getUserId(): int
+    +setUserId(userId: int)
+    +getRoomId(): int
+    +setRoomId(roomId: int)
+    +getCheckInDate(): Date
+    +setCheckInDate(checkInDate: Date)
+    +getCheckOutDate(): Date
+    +setCheckOutDate(checkOutDate: Date)
+    +getTotalPrice(): double
+    +setTotalPrice(totalPrice: double)
+    +getStatus(): String
+    +setStatus(status: String)
+    +getCreatedAt(): Date
+    +setCreatedAt(createdAt: Date)
+  }
+
+  class Room {
+    -roomId: int
+    -resortId: int
+    -roomNumber: String
+    -roomType: String
+    -pricePerNight: double
+    -status: String
+    -capacity: int
+    +getRoomId(): int
+    +setRoomId(roomId: int)
+    +getResortId(): int
+    +setResortId(resortId: int)
+    +getRoomNumber(): String
+    +setRoomNumber(roomNumber: String)
+    +getRoomType(): String
+    +setRoomType(roomType: String)
+    +getPricePerNight(): double
+    +setPricePerNight(pricePerNight: double)
+    +getStatus(): String
+    +setStatus(status: String)
+    +getCapacity(): int
+    +setCapacity(capacity: int)
+  }
+
+  class Resort {
+    -resortId: int
+    -name: String
+    -location: String
+    -type: String
+    -description: String
+    -priceRange: String
+    -amenities: String
+    -createdAt: Timestamp
+    +getResortId(): int
+    +setResortId(resortId: int)
+    +getName(): String
+    +setName(name: String)
+    +getLocation(): String
+    +setLocation(location: String)
+    +getType(): String
+    +setType(type: String)
+    +getDescription(): String
+    +setDescription(description: String)
+    +getPriceRange(): String
+    +setPriceRange(priceRange: String)
+    +getAmenities(): String
+    +setAmenities(amenities: String)
+    +getCreatedAt(): Timestamp
+    +setCreatedAt(createdAt: Timestamp)
+  }
+
+  class Service {
+    -serviceId: int
+    -resortId: int
+    -name: String
+    -description: String
+    -price: double
+    +getServiceId(): int
+    +setServiceId(serviceId: int)
+    +getResortId(): int
+    +setResortId(resortId: int)
+    +getName(): String
+    +setName(name: String)
+    +getDescription(): String
+    +setDescription(description: String)
+    +getPrice(): double
+    +setPrice(price: double)
+  }
+
+  class ServiceBooking {
+    -serviceBookingId: int
+    -bookingId: int
+    -serviceId: int
+    -quantity: int
+    -totalPrice: double
+    +getServiceBookingId(): int
+    +setServiceBookingId(serviceBookingId: int)
+    +getBookingId(): int
+    +setBookingId(bookingId: int)
+    +getServiceId(): int
+    +setServiceId(serviceId: int)
+    +getQuantity(): int
+    +setQuantity(quantity: int)
+    +getTotalPrice(): double
+    +setTotalPrice(totalPrice: double)
+  }
+
+  class Notification {
+    -notificationId: int
+    -userId: int
+    -title: String
+    -message: String
+    -sentAt: Date
+    -isRead: boolean
+    +getNotificationId(): int
+    +getUserId(): int
+    +setUserId(userId: int)
+    +getTitle(): String
+    +getMessage(): String
+    +getSentAt(): Date
+    +isRead(): boolean
+  }
+
+  class Feedback {
+    -id: int
+    -userId: int
+    -content: String
+    -createdAt: Date
+    +getId(): int
+    +setId(id: int)
+    +getUserId(): int
+    +setUserId(userId: int)
+    +getContent(): String
+    +setContent(content: String)
+    +getCreatedAt(): Date
+    +setCreatedAt(createdAt: Date)
+  }
+}
+
+package "Controllers" {
+  class NguoiDungController {
+    -userDao: NguoiDungDAO
+    +login(username: String, password: String): NguoiDung
+    +register(user: NguoiDung): boolean
+    +getAllUsers(): List<NguoiDung>
+    +updateUser(user: NguoiDung): boolean
+    +deleteUser(userId: int): boolean
+    +checkUserExists(username: String, email: String): boolean
+    +getCustomerCount(): int
+    +getUserById(userId: int): NguoiDung
+  }
+
+  class BookingController {
+    -bookingDao: BookingDAO
+    +createBooking(booking: Booking): boolean
+    +getUserBookings(userId: int): List<Booking>
+    +updateBooking(booking: Booking): boolean
+    +cancelBooking(bookingId: int): boolean
+  }
+
+  class RoomController {
+    -roomDao: RoomDAO
+    +getAvailableRooms(): List<Room>
+    +updateRoomStatus(room: Room): boolean
+    +getRoomById(roomId: int): Room
+  }
+
+  class ServiceController {
+    -serviceDao: ServiceDAO
+    +getAllServices(): List<Service>
+    +addService(service: Service): boolean
+    +updateService(service: Service): boolean
+    +deleteService(serviceId: int): boolean
+  }
+}
+
+package "DAO" {
+  class NguoiDungDAO {
+    +getUserByLogin(username: String, password: String): NguoiDung
+    +insertUser(user: NguoiDung): boolean
+    +getAllUsers(): List<NguoiDung>
+    +updateUser(user: NguoiDung): boolean
+    +deleteUser(userId: int): boolean
+    +checkUserExists(username: String, email: String): boolean
+    +getCustomerCount(): int
+    +getUserById(userId: int): NguoiDung
+  }
+
+  class BookingDAO {
+    +insertBooking(booking: Booking): boolean
+    +getUserBookings(userId: int): List<Booking>
+    +updateBooking(booking: Booking): boolean
+    +deleteBooking(bookingId: int): boolean
+  }
+
+  class RoomDAO {
+    +getAvailableRooms(): List<Room>
+    +updateRoom(room: Room): boolean
+    +getRoomById(roomId: int): Room
+  }
+
+  class ServiceDAO {
+    +getAllServices(): List<Service>
+    +insertService(service: Service): boolean
+    +updateService(service: Service): boolean
+    +deleteService(serviceId: int): boolean
+  }
+}
+
+package "Views" {
+  class LoginFrame {
+    -txtUsername: JTextField
+    -txtPassword: JPasswordField
+    -btnLogin: JButton
+    -btnRegister: JButton
+    -userController: NguoiDungController
+    +handleLogin(e: ActionEvent)
+  }
+
+  class RegisterFrame {
+    -txtUsername: JTextField
+    -txtPassword: JPasswordField
+    -txtEmail: JTextField
+    -txtPhone: JTextField
+    -btnRegister: JButton
+    -userController: NguoiDungController
+    +handleRegister(e: ActionEvent)
+  }
+
+  class CustomerFrame {
+    -userId: int
+    -bookingController: BookingController
+    -roomController: RoomController
+    +loadUserBookings()
+    +loadAvailableRooms()
+  }
+
+  class ManagerFrame {
+    -userController: NguoiDungController
+    -bookingController: BookingController
+    -roomController: RoomController
+    -serviceController: ServiceController
+    +loadAllUsers()
+    +loadAllBookings()
+    +loadAllRooms()
+    +loadAllServices()
+  }
+}
+
+package "Utils" {
+  class DBConnection {
+    +getConnection(): Connection
+  }
+
+  class SessionManager {
+    -currentUser: NguoiDung
+    +getInstance(): SessionManager
+    +setCurrentUser(user: NguoiDung)
+    +getCurrentUser(): NguoiDung
+    +clearSession()
+  }
+}
+
+' Relationships
+NguoiDung "1" --> "0..*" Booking : has
+NguoiDung "1" --> "0..*" Notification : receives
+NguoiDung "1" --> "0..*" Feedback : submits
+Booking "0..*" --> "1" Room : books
+Booking "1" --> "0..*" ServiceBooking : includes
+Room "0..*" --> "1" Resort : belongs to
+Service "0..*" --> "1" Resort : belongs to
+ServiceBooking "0..*" --> "1" Service : references
+ServiceBooking "0..*" --> "1" Booking : belongs to
+
+' Controller relationships
+NguoiDungController --> NguoiDungDAO : uses
+BookingController --> BookingDAO : uses
+RoomController --> RoomDAO : uses
+ServiceController --> ServiceDAO : uses
+
+' View relationships
+LoginFrame --> NguoiDungController : uses
+RegisterFrame --> NguoiDungController : uses
+CustomerFrame --> BookingController : uses
+CustomerFrame --> RoomController : uses
+ManagerFrame --> NguoiDungController : uses
+ManagerFrame --> BookingController : uses
+ManagerFrame --> RoomController : uses
+ManagerFrame --> ServiceController : uses
+
+' DAO relationships
+NguoiDungDAO --> DBConnection : uses
+BookingDAO --> DBConnection : uses
+RoomDAO --> DBConnection : uses
+ServiceDAO --> DBConnection : uses
+
+@enduml
